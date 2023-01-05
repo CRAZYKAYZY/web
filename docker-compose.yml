@@ -18,7 +18,7 @@ services:
     env_file:
       - .env
     ports:
-      - 80:8080
+      - 8080:8080
     restart: on-failure
     depends_on:
       - postgresdb
@@ -38,7 +38,7 @@ services:
       - 5432:5432
     hostname: db
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     networks:
       - web-net
 

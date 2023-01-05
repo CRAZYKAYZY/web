@@ -1,36 +1,22 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"os"
+	"github.com/CRAZYKAYZY/web/db"
+	"github.com/gin-gonic/gin"
 
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	pgConnString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-	)
+	db.ConnectDb()
 
-	var (
-		db  *sql.DB
-		err error
-	)
+	server := gin.Default()
 
-	db, err = sql.Open("postgres", pgConnString)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	err = db.Ping()
+	server.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Established a successful connection!")
+	server.Run(":8080")
 }
