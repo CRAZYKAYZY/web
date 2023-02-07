@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/CRAZYKAYZY/web/cmd"
 	"github.com/CRAZYKAYZY/web/db"
 	"github.com/gin-gonic/gin"
 
@@ -8,6 +9,9 @@ import (
 )
 
 func main() {
+	//I want to be able to call this function and run the cobra command.
+	cmd.Execute()
+
 	db.ConnectDb()
 
 	server := gin.Default()
