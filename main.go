@@ -1,26 +1,29 @@
 package main
 
 import (
+	"database/sql"
+
+	api "github.com/CRAZYKAYZY/web/api"
 	"github.com/CRAZYKAYZY/web/cmd"
 	"github.com/CRAZYKAYZY/web/db"
-	"github.com/gin-gonic/gin"
+	sqlc "github.com/CRAZYKAYZY/web/db/sqlc"
 
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	//I want to be able to call this function and run the cobra command.
-	cmd.Execute()
 
+	go cmd.Execute()
+
+	//call db func to connect
 	db.ConnectDb()
 
-	server := gin.Default()
+	store := sqlc.NewStore(&sql.DB{})
+	server := api.NewServer(store) //initialize server
 
-	server.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	server.Run(":8080")
+	//start server
+	err := server.Start(":8080")
+	if err != nil {
+		panic(err)
+	}
 }

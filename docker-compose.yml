@@ -19,21 +19,21 @@ services:
       - web-net
 
   #migration_service
-  # migration:
-  #   image: migrate/migrate
-  #   container_name: migration_container
-  #   volumes:
-  #     - "./db/migrations:/migrations"
-  #   environment:
-  #     - DATABASE_URL
-  #   env_file:
-  #     - .env
-  #   command: ["-path=/migrations", "-database=${DATABASE_URL}", "up"]
-  #   depends_on:
-  #     - db
-  #   restart: on-failure
-  #   networks:
-  #     - web-net
+  migration:
+    image: migrate/migrate
+    container_name: migration_container
+    volumes:
+      - "./db/migrations:/migrations"
+    environment:
+      - DATABASE_URL
+    env_file:
+      - .env
+    command: ["-path=/migrations", "-database=${DATABASE_URL}", "up"]
+    depends_on:
+      - db
+    #restart: on-failure
+    networks:
+      - web-net
   #backend-web-service
   app:
     container_name: goweb_container

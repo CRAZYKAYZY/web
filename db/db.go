@@ -18,19 +18,20 @@ func ConnectDb() {
 	)
 
 	var (
-		db  *sql.DB
+		DB  *sql.DB
 		err error
 	)
 
-	db, err = sql.Open("postgres", pgConnString)
+	DB, err = sql.Open("postgres", pgConnString)
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
-	err = db.Ping()
+	defer DB.Close()
+	err = DB.Ping()
 
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("Established a successful connection!")
+	return
 }
