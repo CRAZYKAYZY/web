@@ -1,7 +1,8 @@
 package main
 
 import (
-	"database/sql"
+	//"database/sql"
+	"log"
 
 	api "github.com/CRAZYKAYZY/web/api"
 	"github.com/CRAZYKAYZY/web/cmd"
@@ -15,15 +16,18 @@ func main() {
 
 	go cmd.Execute()
 
-	//call db func to connect
-	db.ConnectDb()
+	//call db func to connect, to call a func from another package, ensure it returns a value.
+	dbCon, err := db.ConnectDb()
+	if err != nil {
+		log.Fatal("failed to connect to database: ", err)
+	}
 
-	store := sqlc.NewStore(&sql.DB{})
+	store := sqlc.NewStore(dbCon)
 	server := api.NewServer(store) //initialize server
 
 	//start server
-	err := server.Start(":8080")
+	err = server.Start(":8080")
 	if err != nil {
-		panic(err)
+		log.Fatal("error with server", err)
 	}
 }

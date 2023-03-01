@@ -8,7 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func ConnectDb() {
+func ConnectDb() (*sql.DB, error) {
 	pgConnString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
@@ -17,21 +17,21 @@ func ConnectDb() {
 		os.Getenv("DB_PASSWORD"),
 	)
 
-	var (
-		DB  *sql.DB
-		err error
-	)
+	// var (
+	// 	db  *sql.DB
+	// 	err error
+	// )
 
-	DB, err = sql.Open("postgres", pgConnString)
+	db, err := sql.Open("postgres", pgConnString)
 	if err != nil {
 		panic(err)
 	}
-	defer DB.Close()
-	err = DB.Ping()
+	//defer db.Close()
+	err = db.Ping()
 
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("Established a successful connection!")
-	return
+	return db, nil
 }
